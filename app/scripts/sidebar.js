@@ -1,14 +1,13 @@
 import { EventEmitter } from 'events';
 import { remote } from 'electron';
 import { servers } from './servers';
-import { menu, menuTemplate } from './menus';
+import { menuTemplate } from './menus';
 
-var MenuItem = remote.MenuItem;
 var Menu = remote.Menu;
 
-var windowMenuPosition = menuTemplate.findIndex(function(i) {return i.id === 'window'});
+var windowMenuPosition = menuTemplate.findIndex(function(i) {return i.id === 'window';});
 var windowMenu = menuTemplate[windowMenuPosition];
-var serverListSeparatorPosition = windowMenu.submenu.findIndex(function(i) {return i.id === 'server-list-separator'});
+var serverListSeparatorPosition = windowMenu.submenu.findIndex(function(i) {return i.id === 'server-list-separator';});
 var serverListSeparator = windowMenu.submenu[serverListSeparatorPosition];
 
 class SideBar extends EventEmitter {
@@ -72,7 +71,7 @@ class SideBar extends EventEmitter {
 			img.style.display = 'initial';
 			initials.style.display = 'none';
 		};
-		img.src = `${url}/assets/favicon.svg?v=3`;
+		img.src = `${url}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
 
 		var hotkey = document.createElement('div');
 		hotkey.classList.add('name');
@@ -105,7 +104,7 @@ class SideBar extends EventEmitter {
 		var menuItem = {
 			label: host.title,
 			accelerator: 'CmdOrCtrl+' + this.hostCount,
-			position: "before=server-list-separator",
+			position: 'before=server-list-separator',
 			id: url,
 			click: () => {
 				this.emit('click', host.url);
@@ -122,7 +121,7 @@ class SideBar extends EventEmitter {
 		if (el) {
 			el.remove();
 
-			var index = windowMenu.submenu.findIndex(function(i) {return i.id === hostUrl});
+			var index = windowMenu.submenu.findIndex(function(i) {return i.id === hostUrl;});
 			windowMenu.submenu.splice(index, 1);
 			Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 		}
@@ -169,7 +168,11 @@ class SideBar extends EventEmitter {
 
 		if (badge !== null && badge !== undefined && badge !== '') {
 			item.classList.add('unread');
-			badgeEl.innerHTML = badge;
+			if (isNaN(parseInt(badge))) {
+				badgeEl.innerHTML = '';
+			} else {
+				badgeEl.innerHTML = badge;
+			}
 		} else {
 			badge = undefined;
 			item.classList.remove('unread');
